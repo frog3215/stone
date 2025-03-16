@@ -42,18 +42,35 @@ struct player_ {
 player_ player;
 
 
+void pickItemByName(string name_items)
+{
+    auto& cur_loc = location[player.location];
+    for (int i = 0; i < items_names.size(); i++)
+    {
+        if (items_names[i] == name_items)
+        {
+            for (int j = 0; j < cur_loc.items.size(); j++)
+            {
+                if (i == (int)cur_loc.items[j])
+                {
+                    player.items.push_back((items_)i);
+                    cur_loc.items.erase(cur_loc.items.begin() + j);
+                    return;
+                }
+            }
+        }
+    }
 
+}
 
 int main() {
 
-    items_names.push_back("key");
-    items_names.push_back("hemlet");
-    items_names.push_back("sword");
 
     location[0].name = "stone";
     location[0].description = "If you go to the left, you will find death!!!\n If you go front, you will be rich!!!\n If you go to the right, you will found sword.\n You can leave if you want\n";
     location[0].gold = 0;
     location[0].items.push_back(items_::key);
+    items_names.push_back("key");
     location[0].portal.push_back(1);
     location[0].portal.push_back(2);
     location[0].portal.push_back(3);
@@ -67,12 +84,14 @@ int main() {
     location[2].description = " You found 10 gold\n";
     location[2].gold = 10;
     location[2].items.push_back(items_::hemlet);
+    items_names.push_back("hemlet");
     location[2].portal.push_back(0);
 
     location[3].name = "right";
     location[3].description = " You found sword \n";
     location[3].gold = 0;
     location[3].items.push_back(items_::sword);
+    items_names.push_back("sword");
     location[3].portal.push_back(0);
 
     location[4].name = "back";
@@ -86,34 +105,76 @@ int main() {
         auto& cur_loc = location[player.location];
         cout << cur_loc.name << "\n" << cur_loc.description << "\n" << "gold: " << cur_loc.gold << "  \n" ;
 
-        int az = cur_loc.items.size();
-        cout << "items: \n";
-        for (int i = 0; i < az; i++)
-        {
-            auto cur_loc_items = cur_loc.items[i];
-            cout <<  items_names[(int)cur_loc_items] << "\n";
-        }
+        
 
-        int sz = cur_loc.portal.size();
-        for (int i = 0; i < sz; i++)
-        {
-            auto portal = cur_loc.portal[i];
-            cout << "press " << i << " to go " << location[portal].name << "\n";
-        }
-
-
+ 
         if (player.life)
         {
-            int i;
-            cin >> i;
-            player.location = cur_loc.portal[i];
+            bool validate_command = false;
 
-        for (int n = 0; n < cur_loc.portal.size(); n++)
-        {
-            int t = cur_loc.portal[n];
-                    } 
+            while (validate_command == false)
+            {
+                string command;
+                cin >> command;
 
-            player.processLocation();
+                if (command == "go")
+                {
+                    int sz = cur_loc.portal.size();
+                    for (int i = 0; i < sz; i++)
+                    {
+                        auto portal_target = cur_loc.portal[i];
+                        cout << "press " << i << " to go " << location[portal_target].name << "\n";
+                    }
+
+                    validate_command = true;
+                    bool validate = false;
+                    while (validate == false)
+                    {
+                        int selected_way;
+                        cin >> selected_way;
+
+                        if (selected_way >= 0 && selected_way < cur_loc.portal.size())
+                        {
+                            player.location = cur_loc.portal[selected_way];
+                            player.processLocation();
+                            validate = true;
+                        }
+
+                        if (validate == false)
+                        {
+                            cout << "cold'nt go to this location";
+                        }
+                    }
+                }
+                if (command == "pick")
+                {
+                    int az = cur_loc.items.size();
+                    cout << "items: \n";
+                    for (int i = 0; i < az; i++)
+                    {
+                        auto cur_loc_items = cur_loc.items[i];
+                        cout << items_names[(int)cur_loc_items] << "\n";
+                    }
+                    validate_command = true;
+                    string name_items;
+                    cin >> name_items;
+                    
+                    pickItemByName(name_items);
+                }
+                if (command == "list")
+                {
+                    for (int i = 0; i < items_names.size(); i++)
+                    {
+                        cout << items_names[i] << "\n";
+                    }
+                }
+
+
+            }
+
+
+
+
         }
         
     }
