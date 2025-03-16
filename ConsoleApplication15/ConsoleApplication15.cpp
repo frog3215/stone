@@ -54,7 +54,6 @@ int main() {
     location[0].description = "If you go to the left, you will find death!!!\n If you go front, you will be rich!!!\n If you go to the right, you will found sword.\n You can leave if you want\n";
     location[0].gold = 0;
     location[0].items.push_back(items_::key);
-    location[0].items.push_back(items_::hemlet);
     location[0].portal.push_back(1);
     location[0].portal.push_back(2);
     location[0].portal.push_back(3);
@@ -84,15 +83,8 @@ int main() {
 
     while (player.life)
     {
-        auto cur_loc = location[player.location];
+        auto& cur_loc = location[player.location];
         cout << cur_loc.name << "\n" << cur_loc.description << "\n" << "gold: " << cur_loc.gold << "  \n" ;
-
-        int sz = cur_loc.portal.size();
-        for (int i = 0; i < sz; i++)
-        {
-            auto portal = cur_loc.portal[i];
-            cout << "press " << i << " to go " << location[portal].name << "\n";
-        }
 
         int az = cur_loc.items.size();
         cout << "items: \n";
@@ -102,16 +94,28 @@ int main() {
             cout <<  items_names[(int)cur_loc_items] << "\n";
         }
 
+        int sz = cur_loc.portal.size();
+        for (int i = 0; i < sz; i++)
+        {
+            auto portal = cur_loc.portal[i];
+            cout << "press " << i << " to go " << location[portal].name << "\n";
+        }
+
+
         if (player.life)
         {
             int i;
             cin >> i;
             player.location = cur_loc.portal[i];
 
+        for (int n = 0; n < cur_loc.portal.size(); n++)
+        {
+            int t = cur_loc.portal[n];
+                    } 
 
             player.processLocation();
         }
-
+        
     }
 
 }
