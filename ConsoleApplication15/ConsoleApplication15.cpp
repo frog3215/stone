@@ -65,12 +65,15 @@ void pickItemByName(string name_items)
 
 int main() {
 
+    items_names.push_back("key");
+    items_names.push_back("hemlet");
+    items_names.push_back("sword");
 
     location[0].name = "stone";
     location[0].description = "If you go to the left, you will find death!!!\n If you go front, you will be rich!!!\n If you go to the right, you will found sword.\n You can leave if you want\n";
     location[0].gold = 0;
     location[0].items.push_back(items_::key);
-    items_names.push_back("key");
+
     location[0].portal.push_back(1);
     location[0].portal.push_back(2);
     location[0].portal.push_back(3);
@@ -84,14 +87,14 @@ int main() {
     location[2].description = " You found 10 gold\n";
     location[2].gold = 10;
     location[2].items.push_back(items_::hemlet);
-    items_names.push_back("hemlet");
+    
     location[2].portal.push_back(0);
 
     location[3].name = "right";
     location[3].description = " You found sword \n";
     location[3].gold = 0;
     location[3].items.push_back(items_::sword);
-    items_names.push_back("sword");
+    
     location[3].portal.push_back(0);
 
     location[4].name = "back";
@@ -163,9 +166,20 @@ int main() {
                 }
                 if (command == "list")
                 {
-                    for (int i = 0; i < items_names.size(); i++)
+                    for (int i = 0; i < player.items.size(); i++)
                     {
-                        cout << items_names[i] << "\n";
+                        int item = (int)player.items[i];
+                        cout << items_names[item] << "\n";
+                    }
+
+                    
+                }
+                if (command == "seek")
+                {
+                    for (int i = 0; i < cur_loc.items.size(); i++)
+                    {
+                        int item = (int)cur_loc.items[i];
+                        cout << items_names[item] << "\n";
                     }
                 }
 
