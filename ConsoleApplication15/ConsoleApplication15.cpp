@@ -11,6 +11,12 @@ enum class items_ {
 
 vector<string> items_names;
 
+struct portal_
+{
+    int target;
+    bool isActive = false;
+};
+
 struct location_ {
 
     string name;
@@ -22,11 +28,7 @@ struct location_ {
 
 location_ location[6];
 
-struct portal_
-{
-    int target;
-    bool isActive = false;
-};
+
 struct player_ {
 
     int location = 0;
