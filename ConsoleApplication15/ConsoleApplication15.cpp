@@ -16,18 +16,25 @@ struct location_ {
     string name;
     string description;
     vector<items_> items;
-    vector<int> portal;
+    vector<portal_> portal;
     int gold;
 };
 
-location_ location[5];
+location_ location[6];
 
+struct portal_
+{
+    int target;
+    bool isActive = false;
+};
 struct player_ {
 
     int location = 0;
     vector<items_> items;
     int gold;
     bool life = true;
+
+   
 
     void processLocation()
     {
@@ -74,7 +81,7 @@ int main() {
     location[0].gold = 0;
     location[0].items.push_back(items_::key);
 
-    location[0].portal.push_back(1);
+    location[0].portal.push_back({ 1, true});
     location[0].portal.push_back(2);
     location[0].portal.push_back(3);
     location[0].portal.push_back(4);
@@ -101,12 +108,18 @@ int main() {
     location[4].description = " Goodlack travler\n";
     location[4].gold = 0;
     location[4].portal.push_back(0);
+    location[4].portal.push_back(5);
+
+    location[5].name = "secret";
+    location[5].description = " Goblin\n";
+    location[5].gold = 0;
+    location[5].portal.push_back(4);
     
 
     while (player.life)
     {
         auto& cur_loc = location[player.location];
-        cout << cur_loc.name << "\n" << cur_loc.description << "\n" << "gold: " << cur_loc.gold << "  \n" ;
+        cout << cur_loc.name << "\n" << cur_loc.description << "\n" << "gold: " << cur_loc.gold << "  \n" << "player gold:" << player.gold << "\n";
 
         
 
@@ -114,6 +127,7 @@ int main() {
         if (player.life)
         {
             bool validate_command = false;
+            bool hell = false;
 
             while (validate_command == false)
             {
@@ -125,8 +139,17 @@ int main() {
                     int sz = cur_loc.portal.size();
                     for (int i = 0; i < sz; i++)
                     {
+                        if (!hell) 
+                        {
                         auto portal_target = cur_loc.portal[i];
                         cout << "press " << i << " to go " << location[portal_target].name << "\n";
+                        }
+                        else
+                        {
+                            cur_loc.portal[i] = 5;
+                            break;
+                            }
+                        
                     }
 
                     validate_command = true;
@@ -182,7 +205,22 @@ int main() {
                         cout << items_names[item] << "\n";
                     }
                 }
+                if (command == "gold")
+                {
+                    if (player.location == 2)
+                    {
+                        player.gold = location[2].gold;
+                        location[2].gold = 0;
+                        cout << "pick gold " << player.gold << "\n";
+                    }
 
+                }
+                if (command == "use_key")
+                {
+                    
+                        hell = true;
+                    
+                }
 
             }
 
