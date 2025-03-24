@@ -47,18 +47,13 @@ int main() {
     portal_ b = { 2, false };
     
 
-    /*cout << a.target << a.isActive << endl;
-    cout << b.target << b.isActive;*/
+    cout << a.target << a.isActive << endl;
+    cout << b.target << b.isActive;
 
-    //vector<int> p;
-   // p.push_back(9);
+   vector<int> p;
+   p.push_back(9);
 
-    int mas[4] = {0, 1, 3, 5};
-
-    for (int i = 0; i < 4; i++) {
-        mas[i] += 1;
-        cout << mas[i] << " ";
-    }
+    
 
 }
 
