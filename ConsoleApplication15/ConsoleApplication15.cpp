@@ -14,8 +14,7 @@ vector<string> items_names;
 struct portal_
 {
     int target;
-    bool isActive = false;
-    bool isVisible = false;
+    bool isActive = false;   
 };
 
 struct location_ {
@@ -84,10 +83,10 @@ int main() {
     location[0].gold = 0;
     location[0].items.push_back(items_::key);
 
-    location[0].portal.push_back({ 1, true, true});
-    location[0].portal.push_back({ 2, true, true});
-    location[0].portal.push_back({ 3, true, true});
-    location[0].portal.push_back({ 4, true, true});
+    location[0].portal.push_back({ 1, true});
+    location[0].portal.push_back({ 2, true});
+    location[0].portal.push_back({ 3, true});
+    location[0].portal.push_back({ 4, true});
     
     location[1].name = "left";
     location[1].description = "Sorry, you died\n You cant go to the back\n";
@@ -98,25 +97,25 @@ int main() {
     location[2].gold = 10;
     location[2].items.push_back(items_::hemlet);
     
-    location[2].portal.push_back({ 0, true, true});
+    location[2].portal.push_back({ 0, true});
 
     location[3].name = "right";
     location[3].description = " You found sword \n";
     location[3].gold = 0;
     location[3].items.push_back(items_::sword);
     
-    location[3].portal.push_back({ 0, true, true});
+    location[3].portal.push_back({ 0, true});
 
     location[4].name = "back";
     location[4].description = " Goodlack travler\n";
     location[4].gold = 0;
-    location[4].portal.push_back({ 0, true, true});
-    location[4].portal.push_back({5, true, true});
+    location[4].portal.push_back({ 0, true});
+    location[4].portal.push_back({5, true});
 
     location[5].name = "secret";
     location[5].description = " Goblin\n";
     location[5].gold = 0;
-    location[5].portal.push_back({4, true, true});
+    location[5].portal.push_back({4, true});
     
 
     while (player.life)
@@ -142,8 +141,8 @@ int main() {
                     int sz = cur_loc.portal.size();
                     for (int i = 0; i < sz; i++)
                     {
-                        auto portal_ = cur_loc.portal[i];
-                        cout << "press " << i << " to go " << location[portal_].name << "\n";
+                        auto  = cur_loc.portal[i];
+                        cout << "press " << i << " to go " << location[portal].name << "\n";
                                                                       
                     }
 
