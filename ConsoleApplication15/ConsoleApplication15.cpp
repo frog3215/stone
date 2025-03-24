@@ -13,6 +13,7 @@ vector<string> items_names;
 
 struct portal_
 {
+    string name_portal;
     int target;
     bool isActive = false;   
 };
@@ -31,7 +32,7 @@ location_ location[6];
 
 struct player_ {
 
-    int location = 0;
+    int loc = 0;
     vector<items_> items;
     int gold;
     bool life = true;
@@ -40,7 +41,7 @@ struct player_ {
 
     void processLocation()
     {
-        if (location == 1)
+        if ( loc == 1)
         {
             life = false;
         }
@@ -53,7 +54,7 @@ player_ player;
 
 void pickItemByName(string name_items)
 {
-    auto& cur_loc = location[player.location];
+    auto& cur_loc = location[player.loc];
     for (int i = 0; i < items_names.size(); i++)
     {
         if (items_names[i] == name_items)
@@ -71,9 +72,8 @@ void pickItemByName(string name_items)
     }
 
 }
-
-int main() {
-    portal_ a;
+void InitGame()
+{
     items_names.push_back("key");
     items_names.push_back("hemlet");
     items_names.push_back("sword");
@@ -82,11 +82,10 @@ int main() {
     location[0].description = "If you go to the left, you will find death!!!\n If you go front, you will be rich!!!\n If you go to the right, you will found sword.\n You can leave if you want\n";
     location[0].gold = 0;
     location[0].items.push_back(items_::key);
-
-    location[0].portal.push_back({ 1, true});
-    location[0].portal.push_back({ 2, true});
-    location[0].portal.push_back({ 3, true});
-    location[0].portal.push_back({ 4, true});
+    location[0].portal.push_back({ "left", 1, true});
+    location[0].portal.push_back({ "front", 2, true});
+    location[0].portal.push_back({ "right", 3, true});
+    location[0].portal.push_back({ "back", 4, true});
     
     location[1].name = "left";
     location[1].description = "Sorry, you died\n You cant go to the back\n";
@@ -95,44 +94,44 @@ int main() {
     location[2].name = "front";
     location[2].description = " You found 10 gold\n";
     location[2].gold = 10;
-    location[2].items.push_back(items_::hemlet);
-    
-    location[2].portal.push_back({ 0, true});
+    location[2].items.push_back(items_::hemlet);    
+    location[2].portal.push_back({ "stone", 0, true});
 
     location[3].name = "right";
     location[3].description = " You found sword \n";
     location[3].gold = 0;
-    location[3].items.push_back(items_::sword);
-    
-    location[3].portal.push_back({ 0, true});
+    location[3].items.push_back(items_::sword);    
+    location[3].portal.push_back({ "stone", 0, true});
 
     location[4].name = "back";
     location[4].description = " Goodlack travler\n";
     location[4].gold = 0;
-    location[4].portal.push_back({ 0, true});
-    location[4].portal.push_back({5, true});
+    location[4].portal.push_back({"stone", 0, true});
+    location[4].portal.push_back({ "secret", 5, false});
 
     location[5].name = "secret";
     location[5].description = " Goblin\n";
     location[5].gold = 0;
-    location[5].portal.push_back({4, true});
+    location[5].portal.push_back({ "back", 4, true});
+
+}
+
+int main() {
+
+    InitGame();
     
 
     while (player.life)
     {
-        auto cur_loc = location[player.location];
-        cout << cur_loc.name << "\n" << cur_loc.description << "\n" << "gold: " << cur_loc.gold << "  \n" << "player gold:" << player.gold << "\n";
+        auto cur_loc = location[player.loc];
+        cout << cur_loc.name << "\n" << cur_loc.description << "\n" << "gold: " << cur_loc.gold << "\n";
 
-        
-
- 
         if (player.life)
         {
             bool validate_command = false;
-            
 
             while (validate_command == false)
-            {
+            { 
                 string command;
                 cin >> command;
 
@@ -141,30 +140,30 @@ int main() {
                     int sz = cur_loc.portal.size();
                     for (int i = 0; i < sz; i++)
                     {
-                        auto a = cur_loc.portal[i];
-                        cout << "press " << i << " to go " << location[a.target].name << "\n";
-                                                                      
+                        auto portal_target = cur_loc.portal[i];
+                        cout << "press " << i   << " to go " << location[player.loc].portal[i].name_portal << "\n";
+
                     }
 
                     validate_command = true;
                     bool validate = false;
                     while (validate == false)
                     {
-                        
-                        cin >> a.target;
+                        int selected_way;
+                        cin >> selected_way;
 
-                        if (a.target >= 0 && a.isActive)
+                        if (selected_way >= 0 && selected_way < cur_loc.portal.size())
                         {
-                            player.location = a.target;
+                            player.loc = location[player.loc].portal[selected_way].target;
                             player.processLocation();
                             validate = true;
                         }
-
                         if (validate == false)
                         {
                             cout << "cold'nt go to this location";
                         }
                     }
+
                 }
                 if (command == "pick")
                 {
@@ -201,7 +200,7 @@ int main() {
                 }
                 if (command == "gold")
                 {
-                    if (player.location == 2)
+                    if (player.loc == 2)
                     {
                         player.gold = location[2].gold;
                         location[2].gold = 0;
