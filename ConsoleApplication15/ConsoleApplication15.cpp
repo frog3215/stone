@@ -141,7 +141,7 @@ int main() {
                     int sz = cur_loc.portal.size();
                     for (int i = 0; i < sz; i++)
                     {
-                        a.target = cur_loc.portal[i];
+                        auto a = cur_loc.portal[i];
                         cout << "press " << i << " to go " << location[a.target].name << "\n";
                                                                       
                     }
@@ -155,7 +155,7 @@ int main() {
 
                         if (a.target >= 0 && a.isActive)
                         {
-                            player.location = cur_loc.portal[];
+                            player.location = a.target;
                             player.processLocation();
                             validate = true;
                         }
