@@ -46,13 +46,11 @@ int main() {
     portal_ a = { 9 , true };
     portal_ b = { 2, false };
     
-    int i = 9;
+    int i = 9, z = 0;
+    
     cin >> i;
-    cout << a.target << a.isActive << endl;
-    cout << b.target << b.isActive;
-
-   vector<int> p;
-   p.push_back(9);
+    
+    
 
     
 
