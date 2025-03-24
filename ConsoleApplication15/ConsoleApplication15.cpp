@@ -46,7 +46,8 @@ int main() {
     portal_ a = { 9 , true };
     portal_ b = { 2, false };
     
-
+    int i = 9;
+    cin >> i;
     cout << a.target << a.isActive << endl;
     cout << b.target << b.isActive;
 
