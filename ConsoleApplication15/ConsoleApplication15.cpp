@@ -73,7 +73,7 @@ void pickItemByName(string name_items)
 }
 
 int main() {
-
+    portal_ a;
     items_names.push_back("key");
     items_names.push_back("hemlet");
     items_names.push_back("sword");
@@ -120,7 +120,7 @@ int main() {
 
     while (player.life)
     {
-        auto& cur_loc = location[player.location];
+        auto cur_loc = location[player.location];
         cout << cur_loc.name << "\n" << cur_loc.description << "\n" << "gold: " << cur_loc.gold << "  \n" << "player gold:" << player.gold << "\n";
 
         
@@ -141,8 +141,8 @@ int main() {
                     int sz = cur_loc.portal.size();
                     for (int i = 0; i < sz; i++)
                     {
-                        auto  = cur_loc.portal[i];
-                        cout << "press " << i << " to go " << location[portal].name << "\n";
+                        a.target = cur_loc.portal[i];
+                        cout << "press " << i << " to go " << location[a.target].name << "\n";
                                                                       
                     }
 
@@ -150,12 +150,12 @@ int main() {
                     bool validate = false;
                     while (validate == false)
                     {
-                        int target = portal_ target
-                        cin >> target;
+                        
+                        cin >> a.target;
 
-                        if (target >= 0 && portal_; < cur_loc.portal_[])
+                        if (a.target >= 0 && a.isActive)
                         {
-                            player.location = cur_loc.portal[target];
+                            player.location = cur_loc.portal[];
                             player.processLocation();
                             validate = true;
                         }
@@ -212,7 +212,7 @@ int main() {
                 if (command == "use_key")
                 {
                     
-                        hell = true;
+                       
                     
                 }
 
