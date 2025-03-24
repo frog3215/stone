@@ -141,7 +141,7 @@ int main() {
                     for (int i = 0; i < sz; i++)
                     {
                         auto portal_target = cur_loc.portal[i];
-                        cout << "press " << i   << " to go " << location[player.loc].portal[i].name_portal << "\n";
+                        cout << "press " << i << " to go " << location[player.loc].portal[i].name_portal << (location[player.loc].portal[i].isActive ? " (activ)": " (not activ)") << "\n";
 
                     }
 
@@ -152,7 +152,7 @@ int main() {
                         int selected_way;
                         cin >> selected_way;
 
-                        if (selected_way >= 0 && selected_way < cur_loc.portal.size())
+                        if (selected_way >= 0 && selected_way < cur_loc.portal.size() && location[player.loc].portal[selected_way].isActive)
                         {
                             player.loc = location[player.loc].portal[selected_way].target;
                             player.processLocation();
@@ -160,8 +160,10 @@ int main() {
                         }
                         if (validate == false)
                         {
-                            cout << "cold'nt go to this location";
+                            cout << "cold'nt go to this location, you back\n";
+                            break;
                         }
+                          
                     }
 
                 }
@@ -208,17 +210,24 @@ int main() {
                     }
 
                 }
-                if (command == "use_key")
+                if (command == "open")
+                {                    
+                    if (location[0].items.size() < 1 )
+                    {                        
+                        location[4].portal[1].isActive = true;
+                        cout << "Portal open\n";
+                    }
+                    else
+                    {
+                        cout << "you havent key\n";
+                    }
+                }
+                else
                 {
-                    
-                       
-                    
+                        cout << "identifier command\n";
                 }
 
             }
-
-
-
 
         }
         
