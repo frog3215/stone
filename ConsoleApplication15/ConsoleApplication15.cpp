@@ -47,8 +47,11 @@ int main() {
     portal_ b = { 2, false };
     
     int i = 9, z = 0;
+
+    string;
+
     
-    cin >> i;
+    
     
     
 
