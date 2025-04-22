@@ -44,8 +44,15 @@ struct player_ {
         if ( loc == 1)
         {
             life = false;
+            cout << "Game over\n";
+        }
+        else if (loc == 5 && items.empty())
+        {
+            life = false;
+            cout << "Game over\n";
         }
     }
+   
     
 
 };
@@ -120,23 +127,37 @@ void InitGame()
 
     location[5].name = "secret";
     location[5].description = " Goblin\n";
-    location[5].gold = 0;
+    location[5].gold = 100;
     location[5].portal.push_back({ "back", 4, true});
 
 }
 void Command()
 {
     auto cur_loc = location[player.loc];
-    cout << cur_loc.name << "\n" << cur_loc.description << "\n" << "gold: " << cur_loc.gold << "\n";
+    cout << "help: List of commands\n";
         if (player.life)
         {
             bool validate_command = false;
 
-            while (validate_command == false)
+            while (validate_command == false &&  player.life)
             { 
                 string command;
                 cin >> command;
-
+                if (command == "help")
+                {
+                    if (player.loc == 4)
+                    {
+                        cout << "open: Open\n" << "protect: Protect yourself\n" << "attack: Attack\n";
+                    }
+                    else
+                    {
+                        cout << "info: Location information\n" << "go: Movement\n" << "seek: Search\n" << "pick: Pick up an item\n" << "gold: Pick up gold\n" << "List: View inventory\n";
+                    }
+                }
+                if (command == "info")
+                {
+                    cout << cur_loc.name << "\n" << cur_loc.description << "\n" << "location gold: " << cur_loc.gold << "\n";
+                }
                 if (command == "go")
                 {
                     int sz = cur_loc.portal.size();
@@ -186,10 +207,20 @@ void Command()
                 }
                 if (command == "list")
                 {
-                    for (int i = 0; i < player.items.size(); i++)
+                    bool invent = false;
+                    if (!player.items.empty())
                     {
-                        int item = (int)player.items[i];
-                        cout << items_names[item] << "\n";
+                        invent = true;
+                        cout << "player gold: " << player.gold << "\n";
+                        for (int i = 0; i < player.items.size(); i++)
+                        {
+                            int item = (int)player.items[i];
+                            cout << items_names[item] << "\n";
+                        }
+                    }
+                    else if (!invent)
+                    {
+                        cout << "You havent items" << "\n" << "player gold: " << player.gold << "\n";
                     }
                     validate_command = true;
                     
@@ -205,34 +236,52 @@ void Command()
                 }
                 if (command == "gold")
                 {
-                    if (player.loc == 2)
+                    if (player.loc == 2 )
                     {
-                        player.gold = location[2].gold;
+                        player.gold +=  location[2].gold;
                         location[2].gold = 0;
+                        cout << "pick gold " << player.gold << "\n";
+                    }
+                    else if (player.loc == 5)
+                    {
+                        player.gold += location[5].gold;
+                        location[5].gold = 0;
                         cout << "pick gold " << player.gold << "\n";
                     }
                     validate_command = true;
                 }
                 if (command == "open")
                 {
-                    for (int i = 0; i < player.items.size(); i++)
+                    if (player.loc == 4)
                     {
-                        int item = (int)player.items[i];
-                        if (item == (int)items_::key && player.loc == 4)
+                        if (!player.items.empty())
                         {
-                            location[4].portal[1].isActive = true;
-                            cout << "Portal open\n";
-                            player.items.erase(player.items.begin() + i);
-                            break;
-                        }
-                        else if (player.loc != 4)
-                        {
-                            cout << "you cant use this command\n";
+                            bool temp = false;
+                            for (int i = 0; i < player.items.size(); i++)
+                            {
+                                int item = (int)player.items[i];
+                                if (item == (int)items_::key)
+                                {
+                                    temp = true;
+                                    location[4].portal[1].isActive = true;
+                                    cout << "Portal open\n";
+                                    player.items.erase(player.items.begin() + i);
+                                    return;
+                                }
+                            }
+                            if (!temp)
+                            {
+                               cout << "You havent key\n";
+                            }
                         }
                         else
                         {
-                            cout << "you havent key\n";
+                            cout << "You havent key\n";
                         }
+                    }
+                    else
+                    {
+                        cout << "you cant use this command in this location\n";
                     }
                 }
                 
@@ -242,56 +291,94 @@ void Command()
         }
 }
 
-void Fight()
+void Protect()
 {
-    auto cur_loc = location[player.loc];
-    if (player.life && player.loc == 5)
-    {
-        cout << "goblin attack you\n";
+    if (player.loc == 5 && goblin.life)
+    {    
         bool validate_command = false;
 
-        while (validate_command == false)
+        while (validate_command == false && player.life)
         {
+            cout << "goblin attack you\n";
             string command;
             cin >> command;
 
             if (command == "protect")
             {
-                for (int i = 0; i < player.items.size(); i++)
+                if (!player.items.empty())
                 {
-                    int item = (int)player.items[i];
-                    if (item == (int)items_::hemlet)
+                    bool tryp = false;
+                    for (int i = 0; i < player.items.size(); i++)
                     {
-                       
-                        cout << "attack him\n";
-                        player.items.erase(player.items.begin() + i);
-                        break;
+                        int item = (int)player.items[i];
+                        if (item == (int)items_::hemlet)
+                        {
+                            tryp = true;
+                            player.items.erase(player.items.begin() + i);
+                            return;
+                        }
                     }
-                    else
+                    if (!tryp)
                     {
-                        cout << "you died\n";
+                        cout << "you died, you havent hemlet\n";
                         player.life = false;
                     }
                 }
-            }
-
-            if (command == "attack")
-            {
-                for (int i = 0; i < player.items.size(); i++)
-                {
-                    int item = (int)player.items[i];
-                    if (item == (int)items_::sword)
-                    {
-                        goblin.life = false;
-                        cout << "Goblin death\n";
-                    }
-                    else
-                    {
-                        cout << "you cant attack\n";
-                    }
-                }
+                validate_command = true;
             }
         }
+    }
+}
+void Fight()
+{
+    if (player.loc == 5 && goblin.life)
+    {
+        bool validate_command = false;
+
+        while (validate_command == false && player.life)
+        {
+            cout << "attack him\n";
+            string command;
+            cin >> command;
+            if (command == "attack")
+            {
+                if (!player.items.empty())
+                {
+                    bool mod = false;
+                    for (int i = 0; i < player.items.size(); i++)
+                    {
+                        int item = (int)player.items[i];
+                        if (item == (int)items_::sword)
+                        {
+                            mod = true;
+                            goblin.life = false;
+                            cout << "Goblin death\n";
+                            player.items.erase(player.items.begin() + i);
+                            break;
+                        }
+                    }
+                    if (!mod)
+                    {
+                        cout << "You havent sword, you died\n";
+                        player.life = false;
+                    }
+                }
+                else
+                {
+                    cout << "dolbaeb\n";
+                }
+                validate_command = true;
+            }
+            break;
+        }
+    }
+}
+void Win()
+{
+    if (goblin.life == false && player.life && player.loc == 5 && player.gold == 110)
+    {
+        cout << "You win\n";
+        player.life = false;
     }
 }
 
@@ -303,8 +390,9 @@ int main() {
     while (player.life)
     {
         Command();
+        Protect();
         Fight();
-
+        Win();
       
     }
 
